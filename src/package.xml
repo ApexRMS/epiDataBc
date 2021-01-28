@@ -7,12 +7,22 @@
   version="1.0.0">
   <transformers>
     <transformer 
-      name="Load" 
+      name="Download" 
       isPrimary="True"
-      displayName="Load BC CDC COVID-19 data"
+      displayName="Download and prepare BC CDC COVID-19 data"
       programName="Rscript"
-      programArguments="load.R"
+      programArguments="download.R"
       extendsTransformer="epi_Primary"
+      isRunnable ="True">
+      <include>
+        <transformer name="Import"/>
+      </include>
+    </transformer>
+    <transformer
+      name="Import"
+      displayName="Import BC CDC COVID-19 data"
+      programName="Rscript"
+      programArguments="import.R"
       isRunnable ="True">
     </transformer>
   </transformers>
