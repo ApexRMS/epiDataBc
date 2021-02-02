@@ -13,7 +13,39 @@
       programName="Rscript"
       programArguments="data-bc-cdc.R"
       extendsTransformer="epi_Primary"
+      runContext="LocalOnly"
       isRunnable ="True">
+      <datafeeds>
+        <datafeed name="Input" displayName="Input" dataScope="Scenario">
+          <datasheets>
+            <datasheet name="Input" displayName="Input" isSingleRow="True">
+              <columns>
+                <column name="InputID" dataType="Integer" isPrimary="True"/>
+                <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
+                <column name="RegionalSummaryDataURL" displayName="Regional Summary Data URL" dataType="String"/>
+              </columns>
+            </datasheet>
+          </datasheets>
+        </datafeed>
+        <datafeed name="Output" displayName="Output" dataScope="Scenario" isOutput="True">
+          <datasheets>
+            <datasheet name="Output" displayName="Output" isSingleRow="True">
+              <columns>
+                <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
+                <column name="RegionalSummaryDataCSV" displayName="Regional Summary Data URL" dataType="String" isExternalFile="True"/>
+              </columns>
+            </datasheet>
+          </datasheets>
+        </datafeed>        
+      </datafeeds>
     </transformer>
   </transformers>
+  <layouts>
+    <layout name="coreforms_ScenarioDatafeeds" appendTo="epi_Data">
+      <group name="bccdcdata" displayName="BC CDC Data">
+        <item name="Input"/>
+        <item name="Output"/>        
+      </group>
+    </layout>
+  </layouts>
 </package>

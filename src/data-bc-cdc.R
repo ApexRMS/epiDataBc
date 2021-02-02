@@ -12,18 +12,18 @@ library(tidyverse)
 library(lubridate)
 library(data.table)
 
-# TODO: get the current scenario
-# myScenario = scenario()  # Get the SyncroSim scenario that is currently running
-
-# Download the raw data
-# TODO: get this from the scenario's inputs
-downloadUrl <- "http://www.bccdc.ca/Health-Info-Site/Documents/BCCDC_COVID19_Regional_Summary_Data.csv"
-
-
+env = ssimEnvironment()
+myScenario = scenario()
+inputData = datasheet(myScenario, "dataBcCdc_Input")
+downloadUrl <- inputData$RegionalSummaryDataURL
 regionalSummaryData <- read.csv(downloadUrl)
 
-# TODO: Use rsyncrosim to save the raw data to an output datasheet for this scenario
-write.csv(regionalSummaryData, "regional_summary_data.csv")
+#Save raw data
+csvFileName = paste(env$TempDirectory, "epi", "RegionalSummaryData.csv", sep = "/")
+write.csv(regionalSummaryData, csvFileName)
+outputSheet = datasheet(myScenario, "dataBcCdc_Output", empty = T)
+outputSheet = addRow(outputSheet, csvFileName)
+saveDatasheet(myScenario, outputSheet, "dataBcCdc_Output")
 
 # Import the data into DataSummaryInput datasheet
 # Filtering the downloaded case data. We'll take the combined data from all health authorities, with all
@@ -37,12 +37,18 @@ cases <- data.table(regionalSummaryData) %>%
   rename(value=Cases_Reported) %>%
   dplyr::as_tibble()
 
-# TODO: Write the cases to the DataSummaryOutput datasheet
-# Variable = "Cases"
-# Jurisdiction = "Canada - British Columbia"
+summarySheet = datasheet(myScenario, "DataSummaryOutput", empty = T)
+summarySheet[nrow(cases),] <- NA
 
+summarySheet$Iteration = 0 #Fix
+summarySheet$Timestep = 0 #Fix
+summarySheet$Date = cases$date
+summarySheet$Variable = "Data-Cases"
+summarySheet$Jurisdiction = "Canada - British Columbia"
+summarySheet$AgeMin = 0 #Fix
+summarySheet$AgeMax = 0 #Fix
+summarySheet$Sex = "Male" #Fix
+summarySheet$Value = cases$value
 
-
-
-
+saveDatasheet(myScenario, summarySheet, "DataSummaryOutput")
 
