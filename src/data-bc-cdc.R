@@ -14,12 +14,13 @@ library(data.table)
 
 env = ssimEnvironment()
 myScenario = scenario()
+runControl = datasheet(myScenario, "RunControl")
 inputData = datasheet(myScenario, "dataBcCdc_Input")
 downloadUrl <- inputData$RegionalSummaryDataURL
 regionalSummaryData <- read.csv(downloadUrl)
 
 #Save raw data
-csvFileName = paste(env$TempDirectory, "epi", "RegionalSummaryData.csv", sep = "/")
+csvFileName = paste(env$TransferDirectory, "RegionalSummaryData.csv", sep = "/")
 write.csv(regionalSummaryData, csvFileName)
 outputSheet = datasheet(myScenario, "dataBcCdc_Output", empty = T)
 outputSheet = addRow(outputSheet, csvFileName)
@@ -37,18 +38,19 @@ cases <- data.table(regionalSummaryData) %>%
   rename(value=Cases_Reported) %>%
   dplyr::as_tibble()
 
+cases <- subset(cases, cases$date >= runControl$StartDate & cases$date <= runControl$EndDate)
+
 summarySheet = datasheet(myScenario, "DataSummaryOutput", empty = T)
 summarySheet[nrow(cases),] <- NA
 
-summarySheet$Iteration = 0 #Fix
-summarySheet$Timestep = 0 #Fix
+summarySheet$Iteration = 1
 summarySheet$Date = cases$date
+summarySheet$Timestep = floor(difftime(summarySheet$Date, runControl$StartDate, units='days')) + 1
 summarySheet$Variable = "Data-Cases"
 summarySheet$Jurisdiction = "Canada - British Columbia"
-summarySheet$AgeMin = 0 #Fix
-summarySheet$AgeMax = 0 #Fix
-summarySheet$Sex = "Male" #Fix
+summarySheet$AgeMin = NULL
+summarySheet$AgeMax = NULL
+summarySheet$Sex = NULL
 summarySheet$Value = cases$value
 
 saveDatasheet(myScenario, summarySheet, "DataSummaryOutput")
-
