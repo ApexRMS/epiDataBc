@@ -38,14 +38,14 @@ cases <- data.table(regionalSummaryData) %>%
   rename(value=Cases_Reported) %>%
   dplyr::as_tibble()
 
-cases <- subset(cases, cases$date >= runControl$StartDate & cases$date <= runControl$EndDate)
+startDay <- min(cases$date)
 
 summarySheet = datasheet(myScenario, "DataSummaryOutput", empty = T)
 summarySheet[nrow(cases),] <- NA
 
 summarySheet$Iteration = 1
 summarySheet$Date = cases$date
-summarySheet$Timestep = floor(difftime(summarySheet$Date, runControl$StartDate, units='days')) + 1
+summarySheet$Timestep = as.Date(cases$date) - as.Date(startDay) +1
 summarySheet$Variable = "Data-Cases"
 summarySheet$Jurisdiction = "Canada - British Columbia"
 summarySheet$AgeMin = NULL
@@ -54,3 +54,13 @@ summarySheet$Sex = NULL
 summarySheet$Value = cases$value
 
 saveDatasheet(myScenario, summarySheet, "DataSummaryOutput")
+
+runControl$MinimumTimestep <- 1
+runControl$MaximumTimestep <- max(summarySheet$Timestep)
+runControl$StartDate <- min(summarySheet$Date)
+runControl$EndDate <- max(summarySheet$Date)
+runControl$MinimumIteration <- 1
+runControl$MaximumIteration <- 1
+
+saveDatasheet(myScenario, runControl, name = "RunControl")
+
