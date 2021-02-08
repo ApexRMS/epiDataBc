@@ -33,6 +33,7 @@
               <columns>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
                 <column name="RegionalSummaryDataFile" displayName="Regional Summary Data File" dataType="String" isExternalFile="True"/>
+                <column name="DownloadDateTime" displayName="Download Date/Time" dataType="Date"/>                
               </columns>
             </datasheet>
           </datasheets>
