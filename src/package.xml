@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package
   name="dataBcCdc"
-  displayName="Add-On to the Epi Package for BC CDC data"
+  displayName="Add-On to the Epidemic Package for BC CDC COVID-19 data"
   isAddOn="True" 
   extendsPackage="epi"
   version="1.0.0">
@@ -16,9 +16,9 @@
       runContext="LocalOnly"
       isRunnable ="True">
       <datafeeds>
-        <datafeed name="Input" displayName="Input" dataScope="Scenario">
+        <datafeed name="Input" displayName="BC CDC Data" dataScope="Scenario">
           <datasheets>
-            <datasheet name="Input" displayName="Input" isSingleRow="True">
+            <datasheet name="Input" displayName="BC CDC Data" isSingleRow="True">
               <columns>
                 <column name="InputID" dataType="Integer" isPrimary="True"/>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
@@ -32,7 +32,7 @@
             <datasheet name="Output" displayName="Output" isSingleRow="True">
               <columns>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
-                <column name="RegionalSummaryDataCSV" displayName="Regional Summary Data URL" dataType="String" isExternalFile="True"/>
+                <column name="RegionalSummaryDataFile" displayName="Regional Summary Data File" dataType="String" isExternalFile="True"/>
               </columns>
             </datasheet>
           </datasheets>
@@ -42,9 +42,9 @@
   </transformers>
   <layouts>
     <layout name="coreforms_ScenarioDatafeeds" appendTo="epi_Data">
-      <group name="bccdcdata" displayName="BC CDC Data">
+      <group name="bccdcdata" displayName="BC CDC">
         <item name="Input"/>
-        <item name="Output"/>        
+        <item name="Output" forceVisible="True"/>        
       </group>
     </layout>
   </layouts>
