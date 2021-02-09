@@ -27,9 +27,9 @@
             </datasheet>
           </datasheets>
         </datafeed>
-        <datafeed name="Output" displayName="Output" dataScope="Scenario" isOutput="True">
+        <datafeed name="Output" displayName="BC CDC Raw Output" dataScope="Scenario" isOutput="True">
           <datasheets>
-            <datasheet name="Output" displayName="Output" isSingleRow="True">
+            <datasheet name="Output" displayName="BC CDC Raw Output" isSingleRow="True">
               <columns>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
                 <column name="RegionalSummaryDataFile" displayName="Regional Summary Data File" dataType="String" isExternalFile="True"/>
@@ -41,12 +41,4 @@
       </datafeeds>
     </transformer>
   </transformers>
-  <layouts>
-    <layout name="coreforms_ScenarioDatafeeds" appendTo="epi_Data">
-      <group name="bccdcdata" displayName="BC CDC">
-        <item name="Input"/>
-        <item name="Output" forceVisible="True"/>        
-      </group>
-    </layout>
-  </layouts>
 </package>
