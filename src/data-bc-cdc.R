@@ -12,18 +12,20 @@ library(tidyverse)
 library(lubridate)
 library(data.table)
 
-env = ssimEnvironment()
-myScenario = scenario()
-runControl = datasheet(myScenario, "RunControl")
-inputData = datasheet(myScenario, "dataBcCdc_Input")
+env <- ssimEnvironment()
+myScenario <- scenario()
+
+inputData <- datasheet(myScenario, "dataBcCdc_Input")
 downloadUrl <- inputData$RegionalSummaryDataURL
 regionalSummaryData <- read.csv(downloadUrl)
 
 #Save raw data
-csvFileName = paste(env$TransferDirectory, "RegionalSummaryData.csv", sep = "/")
+csvFileName <- paste(env$TransferDirectory, "RegionalSummaryData.csv", sep = "/")
 write.csv(regionalSummaryData, csvFileName)
-outputSheet = datasheet(myScenario, "dataBcCdc_Output", empty = T)
-outputSheet = addRow(outputSheet, csvFileName)
+outputSheet <- datasheet(myScenario, "dataBcCdc_Output", empty = T)
+outputSheet <- transform(outputSheet, DownloadDateTime = as.character(DownloadDateTime))
+
+outputSheet = addRow(outputSheet, c(csvFileName, as.character(Sys.time())))
 saveDatasheet(myScenario, outputSheet, "dataBcCdc_Output")
 
 # Import the data into DataSummaryInput datasheet
@@ -46,7 +48,7 @@ summarySheet[nrow(cases),] <- NA
 summarySheet$Iteration = 1
 summarySheet$Date = cases$date
 summarySheet$Timestep = as.Date(cases$date) - as.Date(startDay) +1
-summarySheet$Variable = "Data-Cases"
+summarySheet$Variable = "Cases"
 summarySheet$Jurisdiction = "Canada - British Columbia"
 summarySheet$AgeMin = NULL
 summarySheet$AgeMax = NULL
@@ -55,12 +57,16 @@ summarySheet$Value = cases$value
 
 saveDatasheet(myScenario, summarySheet, "DataSummaryOutput")
 
-runControl$MinimumTimestep <- 1
-runControl$MaximumTimestep <- max(summarySheet$Timestep)
-runControl$StartDate <- min(summarySheet$Date)
-runControl$EndDate <- max(summarySheet$Date)
-runControl$MinimumIteration <- 1
-runControl$MaximumIteration <- 1
+runControl <- datasheet(myScenario, "RunControl")
+runControl <- transform(runControl, 
+                        StartDate = as.character(StartDate),
+                        EndDate = as.character(EndDate))
+runControl <- addRow(runControl, list(MinimumTimestep = 1, 
+                                   MaximumTimestep = as.numeric(max(summarySheet$Timestep)), 
+                                   MinimumIteration = 1,
+                                   MaximumIteration = 1,
+                                   StartDate = as.character(min(as.Date(summarySheet$Date))),
+                                   EndDate= as.character(max(as.Date(summarySheet$Date)))))
 
 saveDatasheet(myScenario, runControl, name = "RunControl")
 
