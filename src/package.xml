@@ -41,4 +41,10 @@
       </datafeeds>
     </transformer>
   </transformers>
+  <layouts>
+    <layout name="coreforms_ScenarioDatafeeds">
+      <item name="Input" appendTo="epi_Inputs"/>
+      <item name="Output" runRequired="True" appendTo="epi_Outputs"/>
+    </layout>    
+  </layouts>
 </package>
