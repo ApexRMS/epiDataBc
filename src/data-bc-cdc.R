@@ -40,14 +40,11 @@ cases <- data.table(regionalSummaryData) %>%
   rename(value=Cases_Reported) %>%
   dplyr::as_tibble()
 
-startDay <- min(cases$date)
-
-summarySheet = datasheet(myScenario, "DataSummaryOutput", empty = T)
+summarySheet = datasheet(myScenario, "DataSummary", empty = T)
 summarySheet[nrow(cases),] <- NA
 
 summarySheet$Iteration = 1
-summarySheet$Date = cases$date
-summarySheet$Timestep = as.Date(cases$date) - as.Date(startDay) +1
+summarySheet$Timestep = cases$date
 summarySheet$Variable = "Cases"
 summarySheet$Jurisdiction = "Canada - British Columbia"
 summarySheet$AgeMin = NULL
@@ -55,18 +52,13 @@ summarySheet$AgeMax = NULL
 summarySheet$Sex = NULL
 summarySheet$Value = cases$value
 
-saveDatasheet(myScenario, summarySheet, "DataSummaryOutput")
+saveDatasheet(myScenario, summarySheet, "DataSummary")
 
-runControl <- datasheet(myScenario, "RunControl")
-runControl <- transform(runControl, 
-                        StartDate = as.character(StartDate),
-                        EndDate = as.character(EndDate))
-runControl <- addRow(runControl, list(MinimumTimestep = 1, 
-                                   MaximumTimestep = as.numeric(max(summarySheet$Timestep)), 
-                                   MinimumIteration = 1,
-                                   MaximumIteration = 1,
-                                   StartDate = as.character(min(as.Date(summarySheet$Date))),
-                                   EndDate= as.character(max(as.Date(summarySheet$Date)))))
+runControl <- datasheet(myScenario, "RunControl", empty = T)
+runControl[1,] <- NA
+runControl$MinimumTimestep = min(summarySheet$Timestep)
+runControl$MaximumTimestep = max(summarySheet$Timestep)
+runControl$MinimumIteration = 1
+runControl$MaximumIteration = 1
 
 saveDatasheet(myScenario, runControl, name = "RunControl")
-
