@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package name="dataBcCdc" displayName="Add-On to the Epidemic Package for BC CDC COVID-19 data" isAddOn="True" extendsPackage="epi" version="1.0.0">
   <transformers>
-    <transformer 
-      name="Download" 
+    <transformer
+      name="Download"
       isPrimary="True"
       displayName="Download BC CDC COVID-19 data"
       programName="Rscript"
@@ -19,6 +19,9 @@
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
                 <column name="RegionalSummaryDataURL" displayName="Regional Summary Data URL" dataType="String"/>
               </columns>
+              <defaultRecords>
+                <record columns="RegionalSummaryDataURL" values="http://www.bccdc.ca/Health-Info-Site/Documents/BCCDC_COVID19_Regional_Summary_Data.csv"/>
+              </defaultRecords>
             </datasheet>
           </datasheets>
         </datafeed>
@@ -28,18 +31,20 @@
               <columns>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
                 <column name="RegionalSummaryDataFile" displayName="Regional Summary Data File" dataType="String" isExternalFile="True"/>
-                <column name="DownloadDateTime" displayName="Download Date/Time" dataType="Date"/>                
+                <column name="DownloadDateTime" displayName="Download Date/Time" dataType="Date"/>
               </columns>
             </datasheet>
           </datasheets>
-        </datafeed>        
+        </datafeed>
       </datafeeds>
     </transformer>
   </transformers>
   <layouts>
     <layout name="coreforms_ScenarioDatafeeds">
-      <item name="Input" appendTo="epi_Inputs"/>
-      <item name="Output" runRequired="True" appendTo="epi_Outputs"/>
-    </layout>    
+      <group name="DataFeeds" displayName="BC CDC" appendTo="epi_Other">
+        <item name="Input"/>
+        <item name="Output"/>
+      </group>
+    </layout>
   </layouts>
 </package>
