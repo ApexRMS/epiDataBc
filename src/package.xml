@@ -18,21 +18,12 @@
                 <column name="InputID" dataType="Integer" isPrimary="True"/>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
                 <column name="RegionalSummaryDataURL" displayName="Regional Summary Data URL" dataType="String"/>
+                <column name="RegionalSummaryDataFile" displayName="Regional Summary Data File" dataType="String" isExternalFile="True"/>
+                <column name="DownloadDateTime" displayName="Download Date/Time" dataType="Date"/>                
               </columns>
               <defaultRecords>
                 <record columns="RegionalSummaryDataURL" values="http://www.bccdc.ca/Health-Info-Site/Documents/BCCDC_COVID19_Regional_Summary_Data.csv"/>
               </defaultRecords>
-            </datasheet>
-          </datasheets>
-        </datafeed>
-        <datafeed name="Output" displayName="BC CDC Raw Output" dataScope="Scenario" isOutput="True">
-          <datasheets>
-            <datasheet name="Output" displayName="BC CDC Raw Output" isSingleRow="True">
-              <columns>
-                <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
-                <column name="RegionalSummaryDataFile" displayName="Regional Summary Data File" dataType="String" isExternalFile="True"/>
-                <column name="DownloadDateTime" displayName="Download Date/Time" dataType="Date"/>
-              </columns>
             </datasheet>
           </datasheets>
         </datafeed>
@@ -41,10 +32,7 @@
   </transformers>
   <layouts>
     <layout name="coreforms_ScenarioDatafeeds">
-      <group name="DataFeeds" displayName="BC CDC" appendTo="epi_Other">
-        <item name="Input"/>
-        <item name="Output"/>
-      </group>
+      <item name="Input" displayName="BC CDC" appendTo="epi_Sources"/>
     </layout>
   </layouts>
 </package>
