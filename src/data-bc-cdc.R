@@ -55,7 +55,7 @@ cases <- data.table(regionalSummaryData) %>%
 
 summarySheet[nrow(cases),] <- NA
 summarySheet$Timestep <- cases$date
-summarySheet$Variable <- "Cases"
+summarySheet$Variable <- "Cases - Daily"
 summarySheet$Jurisdiction <- "Canada - British Columbia"
 summarySheet$AgeMin <- NULL
 summarySheet$AgeMax <- NULL
