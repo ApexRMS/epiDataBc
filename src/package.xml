@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="dataBcCdc" displayName="Add-On to the Epidemic Package for BC CDC COVID-19 data" isAddOn="True" extendsPackage="epi" version="1.0.0">
+<package name="dataBcCdc" displayName="Add-On to the epi package for BC CDC data" isAddOn="True" extendsPackage="epi" version="1.0.0">
   <transformers>
     <transformer
       name="Download"
       isPrimary="True"
-      displayName="Download BC CDC COVID-19 data"
+      displayName="BC CDC: Download data"
       programName="Rscript"
       programArguments="data-bc-cdc.R"
       extendsTransformer="epi_Primary"
       runContext="LocalOnly"
       isRunnable ="True">
       <datafeeds>
-        <datafeed name="Input" displayName="BC CDC Data" dataScope="Scenario">
+        <datafeed name="Inputs" displayName="BC CDC Data - Inputs" dataScope="Scenario">
           <datasheets>
-            <datasheet name="Input" displayName="BC CDC Data" isSingleRow="True">
+            <datasheet name="Inputs" displayName="BC CDC Data - Inputs" isSingleRow="True">
               <columns>
                 <column name="InputID" dataType="Integer" isPrimary="True"/>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
-                <column name="RegionalSummaryDataURL" displayName="Regional Summary Data URL" dataType="String"/>
-                <column name="RegionalSummaryDataFile" displayName="Regional Summary Data File" dataType="String" isExternalFile="True"/>
-                <column name="DownloadDateTime" displayName="Download Date/Time" dataType="Date"/>                
+                <column name="RegionalSummaryDataURL" displayName="Regional summary data URL" dataType="String"/>
               </columns>
               <defaultRecords>
                 <record columns="RegionalSummaryDataURL" values="http://www.bccdc.ca/Health-Info-Site/Documents/BCCDC_COVID19_Regional_Summary_Data.csv"/>
               </defaultRecords>
+            </datasheet>
+          </datasheets>
+        </datafeed>
+        <datafeed name="Outputs" displayName="BC CDC Data - Outputs" dataScope="Scenario">
+          <datasheets>
+            <datasheet name="Outputs" displayName="BC CDC Data - Outputs" isSingleRow="True">
+              <columns>
+                <column name="InputID" dataType="Integer" isPrimary="True"/>
+                <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
+                <column name="RegionalSummaryDataFile" displayName="Regional summary data file" dataType="String" isExternalFile="True"/>
+                <column name="DownloadDateTime" displayName="Download date/time" dataType="Date"/>                
+              </columns>
             </datasheet>
           </datasheets>
         </datafeed>
@@ -32,7 +42,10 @@
   </transformers>
   <layouts>
     <layout name="coreforms_ScenarioDatafeeds">
-      <item name="Input" displayName="BC CDC" appendTo="epi_Sources"/>
+      <group name="bcCdc" displayName="BC CDC Download" appendTo="epi_Sources">
+		  <item name="Inputs" displayName="Inputs"/>
+		  <item name="Outputs" displayName="Outputs"/>
+      </group>
     </layout>
   </layouts>
 </package>
