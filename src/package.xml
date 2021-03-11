@@ -38,6 +38,12 @@
           </datasheets>
         </datafeed>
       </datafeeds>
+      <pipeline>
+        <datafeed name="Inputs" type="Input"/>
+        <datafeed name="Outputs" type="Output"/>        
+        <datafeed name="epi_DataSummary" type="Output"/>
+        <datafeed name="epi_RunControl" type="Output"/>
+      </pipeline>
     </transformer>
   </transformers>
   <layouts>
