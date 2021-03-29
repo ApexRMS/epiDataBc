@@ -68,6 +68,7 @@ cases <- data.table(regionalSummaryData) %>%
   dplyr::as_tibble()
 
 summarySheet[nrow(cases),] <- NA
+summarySheet$TransformerID="BC CDC: Download data"
 summarySheet$Timestep <- cases$date
 summarySheet$Variable <- casesDailyVar
 summarySheet$Jurisdiction <- jurisdictionBC

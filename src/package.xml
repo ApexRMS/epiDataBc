@@ -48,10 +48,13 @@
   </transformers>
   <layouts>
     <layout name="coreforms_ScenarioDatafeeds">
-      <group name="bcCdc" displayName="BC CDC Download" appendTo="epi_Sources">
-		  <item name="Inputs" displayName="Inputs"/>
-		  <item name="Outputs" displayName="Outputs"/>
+      <group name="bcCdcSources" displayName="BC CDC Download" appendTo="epi_Sources">
+		    <item name="Inputs" displayName="Inputs"/>
+		    <item name="Outputs" displayName="Outputs"/>
       </group>
+      <group name="bcCdcModels" displayName="BC CDC Download" appendTo="epi_Models">
+        <item name="epi_DataSummary" transformerFilter="Download"/>  
+      </group>    
     </layout>
   </layouts>
 </package>
