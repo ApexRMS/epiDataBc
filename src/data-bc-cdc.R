@@ -5,11 +5,12 @@
 # -Use Run Control to filter the download dates (if provided)
 
 # Datasheets:
-#   dataBcCdc_Input - optional user-specified download URL
-#                   - copy of downloaded CSV filename and raw data
-#                   - date and time of the download
-#   epi_DataSummary - case data in summary format
-#   epi_RunControl  - start and end dates of raw downloaded data
+#   dataBcCdc_Inputs  - optional user-specified download URL
+#                     - copy of downloaded CSV filename and raw data
+#                     - date and time of the download
+#   dataBcCdc_Outputs - raw data and download date/time
+#   epi_Variable      - required variables for epi_DataSummary
+#   epi_DataSummary   - case data in summary format
 
 library(rsyncrosim)
 library(tidyverse)
@@ -28,7 +29,7 @@ transferDir = env$TransferDirectory
 # Get the scenario that is currently being run
 myScenario <- scenario()
 
-# Add the required variables and jurisdictions to the SyncroSim project (will ignore if they exist already)
+# Add the required jurisdictions and variables to the SyncroSim project (will ignore if they exist already)
 saveDatasheet(myScenario, data.frame(Name = jurisdictionBC), "epi_Jurisdiction")
 saveDatasheet(myScenario, data.frame(Name = c(casesDailyVar, casesCumVar)), "epi_Variable")
 
@@ -37,8 +38,6 @@ inputSheet <- datasheet(myScenario, "dataBcCdc_Inputs")
 outputSheet <- datasheet(myScenario, "dataBcCdc_Outputs")
 outputSheet <- transform(outputSheet, DownloadDateTime = as.character(DownloadDateTime))
 summarySheet <- datasheet(myScenario, "epi_DataSummary", empty = T)
-runControl <- datasheet(myScenario, "epi_RunControl", empty = T)
-runtimeJurisdiction <- datasheet(myScenario, "epi_RuntimeJurisdiction", empty = T)
 
 # Download the raw data and process
 downloadUrl <- inputSheet$RegionalSummaryDataURL
@@ -83,18 +82,3 @@ summarySheet <- mutate(summarySheet, Value = cumsum(Value)) %>%
   bind_rows(summarySheet)
 
 saveDatasheet(myScenario, summarySheet, "epi_DataSummary")
-
-# Save the start and end date of the raw data to Run Control datasheet
-
-runControl[1,] <- NA
-runControl$MinimumTimestep <- min(summarySheet$Timestep)
-runControl$MaximumTimestep <- max(summarySheet$Timestep)
-
-saveDatasheet(myScenario, runControl, name = "epi_RunControl")
-
-# Save the jurisdiction of the raw data to the Runtime Jurisdiction datasheet
-runtimeJurisdiction[1,] <- NA
-runtimeJurisdiction$Jurisdiction <- jurisdictionBC
-saveDatasheet(myScenario, runtimeJurisdiction, name = "epi_RuntimeJurisdiction")
-
-

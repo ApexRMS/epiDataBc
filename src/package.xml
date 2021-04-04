@@ -7,8 +7,7 @@
       displayName="BC CDC: Download data"
       programName="Rscript"
       programArguments="data-bc-cdc.R"
-      extendsTransformer="epi_Primary"
-      runContext="LocalOnly"
+      isStandalone="True"
       isRunnable ="True">
       <datafeeds>
         <datafeed name="Inputs" displayName="BC CDC Data - Inputs" dataScope="Scenario">
@@ -17,6 +16,8 @@
               <columns>
                 <column name="InputID" dataType="Integer" isPrimary="True"/>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
+                <column name="MinimumTimestep" displayName="Start Date" dataType="Date" validationType="Date"/>
+                <column name="MaximumTimestep" displayName="End Date" dataType="Date" validationType="Date"/>
                 <column name="RegionalSummaryDataURL" displayName="Regional summary data URL" dataType="String"/>
               </columns>
               <defaultRecords>
@@ -42,7 +43,6 @@
         <datafeed name="Inputs" type="Input"/>
         <datafeed name="Outputs" type="Output"/>        
         <datafeed name="epi_DataSummary" type="Output"/>
-        <datafeed name="epi_RunControl" type="Output"/>
       </pipeline>
     </transformer>
   </transformers>
