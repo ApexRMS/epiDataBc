@@ -36,8 +36,8 @@ write.csv(regionalSummaryData, csvFileName)
 outputSheet = data.frame(
   RegionalSummaryDataFile = csvFileName,
   DownloadDateTime = as.character(Sys.time()),
-  MinimumTimestep = as.character(min(regionalSummaryData$Date)),
-  MaximumTimestep = as.character(max(regionalSummaryData$Date))
+  MinimumTimestep = as.character(min(as.character(regionalSummaryData$Date))),
+  MaximumTimestep = as.character(max(as.character(regionalSummaryData$Date)))
 )
 saveDatasheet(myScenario, outputSheet, "epiDataBc_ResultsRaw")
 
