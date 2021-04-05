@@ -33,28 +33,32 @@
                 <column name="MinimumTimestep" displayName="Start date" dataType="String"/>
                 <column name="MaximumTimestep" displayName="End date" dataType="String"/>
                 <column name="RegionalSummaryDataFile" displayName="Regional summary data file" dataType="String" isExternalFile="True"/>
-                <column name="DownloadDateTime" displayName="Download date/time" dataType="Date"/>                
+                <column name="DownloadDateTime" displayName="Download date/time" dataType="Date"/>
               </columns>
             </datasheet>
           </datasheets>
         </datafeed>
       </datafeeds>
       <pipeline>
-        <datafeed name="Settings" type="Input"/>
-        <datafeed name="ResultsRaw" type="Output"/>        
-        <datafeed name="epi_DataSummary" type="Output"/>
+        <datafeed name="Settings"/>
       </pipeline>
     </transformer>
   </transformers>
   <layouts>
     <layout name="coreforms_ScenarioDatafeeds">
       <group name="bcCdc" displayName="BC CDC" appendTo="epi_Sources">
-		    <item name="Settings" displayName="Download Settings"/>
-			<group name="Results" displayName="Download Results">
-				<item name="ResultsRaw" displayName="Raw"/>
-				<item name="epi_DataSummary" displayName="Summary" transformerFilter="Download"/>
-			</group>
-	  </group>
+        <item name="Settings" displayName="Download Settings" showIf="isEither"/>
+        <group name="Results" displayName="Download Results">
+          <item name="ResultsRaw" displayName="Raw" showIf="isResult"/>
+          <item
+            name="epi_DataSummary"
+            displayName="Summary"
+            transformerFilter="Download"
+            showIf="isResult"
+            viewClassName="SyncroSim.Core.Forms.MultiRowDataFeedView"
+            viewClassAssembly="SyncroSim.Core.Forms"/>
+        </group>
+      </group>
     </layout>
   </layouts>
 </package>
