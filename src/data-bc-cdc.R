@@ -1,17 +1,6 @@
 # data-bc-cdc.R
 # Downloads data from the BC CDC website for use in the SyncroSim epi Package
 
-# TODO:
-# -Use Run Control to filter the download dates (if provided)
-
-# Datasheets:
-#   dataBcCdc_Inputs  - optional user-specified download URL
-#                     - copy of downloaded CSV filename and raw data
-#                     - date and time of the download
-#   dataBcCdc_Outputs - raw data and download date/time
-#   epi_Variable      - required variables for epi_DataSummary
-#   epi_DataSummary   - case data in summary format
-
 library(rsyncrosim)
 library(tidyverse)
 library(lubridate)
@@ -35,7 +24,7 @@ saveDatasheet(myScenario, data.frame(Name = jurisdictionBC), "epi_Jurisdiction")
 saveDatasheet(myScenario, data.frame(Name = c(casesDailyVar, casesCumVar)), "epi_Variable")
 
 # Get the required scenario-scoped input datasheet
-inputSheet <- datasheet(myScenario, "dataBcCdc_Settings")
+inputSheet <- datasheet(myScenario, "epiDataBc_Settings")
 
 # Download the raw data and process
 downloadUrl <- inputSheet$RegionalSummaryDataURL
@@ -50,7 +39,7 @@ outputSheet = data.frame(
   MinimumTimestep = as.character(min(regionalSummaryData$Date)),
   MaximumTimestep = as.character(max(regionalSummaryData$Date))
 )
-saveDatasheet(myScenario, outputSheet, "dataBcCdc_ResultsRaw")
+saveDatasheet(myScenario, outputSheet, "epiDataBc_ResultsRaw")
 
 # Import the data into the DataSummary datasheet
 
