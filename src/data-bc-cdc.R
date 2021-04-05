@@ -21,6 +21,7 @@ library(data.table)
 jurisdictionBC <- "Canada - British Columbia"
 casesDailyVar <- "Cases - Daily"
 casesCumVar <- "Cases - Cumulative"
+transformerName <- "Download BC CDC Data"
 
 # Get the environment 
 env <- ssimEnvironment()
@@ -33,11 +34,8 @@ myScenario <- scenario()
 saveDatasheet(myScenario, data.frame(Name = jurisdictionBC), "epi_Jurisdiction")
 saveDatasheet(myScenario, data.frame(Name = c(casesDailyVar, casesCumVar)), "epi_Variable")
 
-# Get the required scenario-scoped datasheets
-inputSheet <- datasheet(myScenario, "dataBcCdc_Inputs")
-outputSheet <- datasheet(myScenario, "dataBcCdc_Outputs")
-outputSheet <- transform(outputSheet, DownloadDateTime = as.character(DownloadDateTime))
-summarySheet <- datasheet(myScenario, "epi_DataSummary", empty = T)
+# Get the required scenario-scoped input datasheet
+inputSheet <- datasheet(myScenario, "dataBcCdc_Settings")
 
 # Download the raw data and process
 downloadUrl <- inputSheet$RegionalSummaryDataURL
@@ -46,12 +44,13 @@ regionalSummaryData <- read.csv(downloadUrl)
 csvFileName <- paste(transferDir, "Regional_Summary_Data.csv", sep = "/")
 write.csv(regionalSummaryData, csvFileName)
 
-# Save input parameters used
-outputSheet[1,] <-NA
-# inputSheet$RegionalSummaryDataURL <- downloadUrl
-outputSheet$RegionalSummaryDataFile <- csvFileName
-outputSheet$DownloadDateTime = as.character(Sys.time())
-saveDatasheet(myScenario, outputSheet, "dataBcCdc_Outputs")
+outputSheet = data.frame(
+  RegionalSummaryDataFile = csvFileName,
+  DownloadDateTime = as.character(Sys.time()),
+  MinimumTimestep = as.character(min(regionalSummaryData$Date)),
+  MaximumTimestep = as.character(max(regionalSummaryData$Date))
+)
+saveDatasheet(myScenario, outputSheet, "dataBcCdc_ResultsRaw")
 
 # Import the data into the DataSummary datasheet
 
@@ -66,14 +65,15 @@ cases <- data.table(regionalSummaryData) %>%
   rename(value=Cases_Reported) %>%
   dplyr::as_tibble()
 
+summarySheet <- datasheet(myScenario, "epi_DataSummary", empty = T, optional=T)
 summarySheet[nrow(cases),] <- NA
-summarySheet$TransformerID="BC CDC: Download data"
+summarySheet$TransformerID <- transformerName
 summarySheet$Timestep <- cases$date
 summarySheet$Variable <- casesDailyVar
 summarySheet$Jurisdiction <- jurisdictionBC
-summarySheet$AgeMin <- NULL
-summarySheet$AgeMax <- NULL
-summarySheet$Sex <- NULL
+# summarySheet$AgeMin <- NA
+# summarySheet$AgeMax <- NULL
+# summarySheet$Sex <- NULL
 summarySheet$Value <- cases$value
 
 # Add cumulative cases

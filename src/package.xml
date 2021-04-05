@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="dataBcCdc" displayName="Add-On to the epi package for BC CDC data" isAddOn="True" extendsPackage="epi" version="1.0.0">
+<package name="dataBcCdc" displayName="Add-On to the epi package for downloading BC CDC data" isAddOn="True" extendsPackage="epi" version="1.0.0">
   <transformers>
     <transformer
       name="Download"
       isPrimary="True"
-      displayName="BC CDC: Download data"
+      displayName="Download BC CDC Data"
       programName="Rscript"
       programArguments="data-bc-cdc.R"
       isStandalone="True"
       isRunnable ="True">
       <datafeeds>
-        <datafeed name="Inputs" displayName="BC CDC Data - Inputs" dataScope="Scenario">
+        <datafeed name="Settings" displayName="BC CDC Data Download - Settings" dataScope="Scenario">
           <datasheets>
-            <datasheet name="Inputs" displayName="BC CDC Data - Inputs" isSingleRow="True">
+            <datasheet name="Settings" displayName="BC CDC Data Download - Settings" isSingleRow="True">
               <columns>
                 <column name="InputID" dataType="Integer" isPrimary="True"/>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
-                <column name="MinimumTimestep" displayName="Start Date" dataType="Date" validationType="Date"/>
-                <column name="MaximumTimestep" displayName="End Date" dataType="Date" validationType="Date"/>
                 <column name="RegionalSummaryDataURL" displayName="Regional summary data URL" dataType="String"/>
               </columns>
               <defaultRecords>
@@ -26,12 +24,14 @@
             </datasheet>
           </datasheets>
         </datafeed>
-        <datafeed name="Outputs" displayName="BC CDC Data - Outputs" dataScope="Scenario">
+        <datafeed name="ResultsRaw" displayName="BC CDC Data Download - Raw Results" dataScope="Scenario">
           <datasheets>
-            <datasheet name="Outputs" displayName="BC CDC Data - Outputs" isSingleRow="True">
+            <datasheet name="ResultsRaw" displayName="BC CDC Data Download - Raw Results" isSingleRow="True">
               <columns>
                 <column name="InputID" dataType="Integer" isPrimary="True"/>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
+                <column name="MinimumTimestep" displayName="Start date" dataType="String"/>
+                <column name="MaximumTimestep" displayName="End date" dataType="String"/>
                 <column name="RegionalSummaryDataFile" displayName="Regional summary data file" dataType="String" isExternalFile="True"/>
                 <column name="DownloadDateTime" displayName="Download date/time" dataType="Date"/>                
               </columns>
@@ -40,21 +40,21 @@
         </datafeed>
       </datafeeds>
       <pipeline>
-        <datafeed name="Inputs" type="Input"/>
-        <datafeed name="Outputs" type="Output"/>        
+        <datafeed name="Settings" type="Input"/>
+        <datafeed name="ResultsRaw" type="Output"/>        
         <datafeed name="epi_DataSummary" type="Output"/>
       </pipeline>
     </transformer>
   </transformers>
   <layouts>
     <layout name="coreforms_ScenarioDatafeeds">
-      <group name="bcCdcSources" displayName="BC CDC Download" appendTo="epi_Sources">
-		    <item name="Inputs" displayName="Inputs"/>
-		    <item name="Outputs" displayName="Outputs"/>
-      </group>
-      <group name="bcCdcModels" displayName="BC CDC Download" appendTo="epi_Models">
-        <item name="epi_DataSummary" transformerFilter="Download"/>  
-      </group>    
+      <group name="bcCdc" displayName="BC CDC" appendTo="epi_Sources">
+		    <item name="Settings" displayName="Download Settings"/>
+			<group name="Results" displayName="Download Results">
+				<item name="ResultsRaw" displayName="Raw"/>
+				<item name="epi_DataSummary" displayName="Summary" transformerFilter="Download"/>
+			</group>
+	  </group>
     </layout>
   </layouts>
 </package>
