@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="epiDataBc" displayName="Add-on to the epi package for downloading BC CDC data" isAddOn="True" extendsPackage="epi" version="1.0.0">
+<package name="epiDataBc" displayName="Add-on to the epi package for downloading BC CDC COVID-19 data" isAddOn="True" extendsPackage="epi" version="1.0.0">
   <transformers>
     <transformer
       name="Download"
@@ -10,9 +10,9 @@
       isStandalone="True"
       isRunnable ="True">
       <datafeeds>
-        <datafeed name="Settings" displayName="BC CDC Data Download - Settings" dataScope="Scenario">
+        <datafeed name="Settings" displayName="Data Sources - BC CDC - Download Settings" dataScope="Scenario">
           <datasheets>
-            <datasheet name="Settings" displayName="BC CDC Data Download - Settings" isSingleRow="True">
+            <datasheet name="Settings" displayName="Data Sources - BC CDC - Download Settings" isSingleRow="True">
               <columns>
                 <column name="InputID" dataType="Integer" isPrimary="True"/>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
@@ -49,10 +49,10 @@
       <group name="bcCdc" displayName="BC CDC" appendTo="epi_Sources">
         <item name="Settings" displayName="Download Settings" showIf="isEither"/>
         <group name="Results" displayName="Download Results">
-          <item name="ResultsRaw" displayName="Raw" showIf="isResult"/>
+          <item name="ResultsRaw" displayName="Raw Data" showIf="isResult"/>
           <item
             name="epi_DataSummary"
-            displayName="Summary"
+            displayName="Summary Data"
             transformerFilter="Download"
             showIf="isResult"
             viewClassName="SyncroSim.Core.Forms.MultiRowDataFeedView"
