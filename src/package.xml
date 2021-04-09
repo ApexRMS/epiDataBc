@@ -7,16 +7,17 @@
       displayName="Download BC CDC Data"
       programName="Rscript"
       programArguments="data-bc-cdc.R"
-      isStandalone="True"
       isRunnable ="True">
       <datafeeds>
-        <datafeed name="Settings" displayName="Data Sources - BC CDC - Download Settings" dataScope="Scenario">
+        <datafeed name="Settings" displayName="Download Settings" dataScope="Scenario">
           <datasheets>
-            <datasheet name="Settings" displayName="Data Sources - BC CDC - Download Settings" isSingleRow="True">
+            <datasheet name="Settings" displayName="Download Settings" isSingleRow="True">
               <columns>
                 <column name="InputID" dataType="Integer" isPrimary="True"/>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
                 <column name="RegionalSummaryDataURL" displayName="Regional summary data URL" dataType="String"/>
+                <column name="RegionalSummaryDataFile" displayName="Regional summary data file" dataType="String" isExternalFile="True"/>
+                <column name="DownloadDateTime" displayName="Download date/time" dataType="Date"/>
               </columns>
               <defaultRecords>
                 <record columns="RegionalSummaryDataURL" values="http://www.bccdc.ca/Health-Info-Site/Documents/BCCDC_COVID19_Regional_Summary_Data.csv"/>
@@ -24,9 +25,9 @@
             </datasheet>
           </datasheets>
         </datafeed>
-        <datafeed name="ResultsRaw" displayName="BC CDC Data Download - Raw Results" dataScope="Scenario">
+        <datafeed name="ResultsRaw" displayName="Raw Results" dataScope="Scenario">
           <datasheets>
-            <datasheet name="ResultsRaw" displayName="BC CDC Data Download - Raw Results" isSingleRow="True">
+            <datasheet name="ResultsRaw" displayName="Raw Results" isSingleRow="True">
               <columns>
                 <column name="InputID" dataType="Integer" isPrimary="True"/>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
@@ -47,16 +48,17 @@
   <layouts>
     <layout name="coreforms_ScenarioDatafeeds">
       <group name="bcCdc" displayName="BC CDC" appendTo="epi_Sources">
-        <item name="Settings" displayName="Download Settings" showIf="isEither"/>
+        <item name="Settings" displayName="Download Settings" itemTransformer="Download" showIf="isEither"/>
         <group name="Results" displayName="Download Results">
-          <item name="ResultsRaw" displayName="Raw Data" showIf="isResult"/>
+          <item name="ResultsRaw" displayName="Raw Data" itemTransformer="Download" showIf="isResult"/>
           <item
             name="epi_DataSummary"
             displayName="Summary Data"
-            transformerFilter="Download"
             showIf="isResult"
             viewClassName="SyncroSim.Core.Forms.MultiRowDataFeedView"
-            viewClassAssembly="SyncroSim.Core.Forms"/>
+            viewClassAssembly="SyncroSim.Core.Forms"
+            filterTransformer="Download"
+            itemTransformer="Download"/>
         </group>
       </group>
     </layout>
