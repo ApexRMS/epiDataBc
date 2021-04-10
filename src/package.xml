@@ -16,8 +16,6 @@
                 <column name="InputID" dataType="Integer" isPrimary="True"/>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
                 <column name="RegionalSummaryDataURL" displayName="Regional summary data URL" dataType="String"/>
-                <column name="RegionalSummaryDataFile" displayName="Regional summary data file" dataType="String" isExternalFile="True"/>
-                <column name="DownloadDateTime" displayName="Download date/time" dataType="Date"/>
               </columns>
               <defaultRecords>
                 <record columns="RegionalSummaryDataURL" values="http://www.bccdc.ca/Health-Info-Site/Documents/BCCDC_COVID19_Regional_Summary_Data.csv"/>
