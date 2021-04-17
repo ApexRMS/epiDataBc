@@ -61,12 +61,10 @@ cases <- data.table(regionalSummaryData) %>%
   separate(col=Date, into=c("date"), sep=' ') %>%
   mutate_at(vars(date), as.IDate) %>%
   subset(HA %in% regionsToKeep & Province=="BC") %>%
-  select(date, value = Cases_Reported, Jurisdiction = HA, Subregions = HSDA) %>%
+  filter(HSDA == "All") %>%
+  select(date, value = Cases_Reported, Jurisdiction = HA) %>%
   mutate(Jurisdiction = str_c(jurisdictionBC, " - ", Jurisdiction)) %>%
   dplyr::as_tibble()
-
-if(inputSheet$Regions)
-  cases <- cases %>% filter(Subregions != "All")
 
 summarySheet <- datasheet(myScenario, "epi_DataSummary", empty = T, optional=T)
 summarySheet[nrow(cases),] <- NA
@@ -80,10 +78,14 @@ if(!inputSheet$Regions) {
 summarySheet$Value <- cases$value
 
 # Add cumulative cases
-summarySheet <- mutate(summarySheet, Value = cumsum(Value)) %>%
+summarySheetCumulative <- 
+  summarySheet %>%
   group_by(Jurisdiction) %>%
-  mutate(Variable = casesCumVar) %>%
-  ungroup() %>%
-  bind_rows(summarySheet)
+  group_split %>%
+  map(~ .x %>% mutate(Value = cumsum(Value))) %>%
+  bind_rows %>%
+  mutate(Variable = casesCumVar)
 
+summarySheet <- bind_rows(summarySheet, summarySheetCumulative)
+    
 saveDatasheet(myScenario, summarySheet, "epi_DataSummary")
