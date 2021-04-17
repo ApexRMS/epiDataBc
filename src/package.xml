@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package name="epiDataBc" displayName="Add-on to the epi package for downloading BC CDC COVID-19 data" isAddOn="True" extendsPackage="epi" version="1.0.0">
+<package name="epiDataBc" displayName="BC COVID-19 Data" isAddOn="True" extendsPackage="epi" version="1.0.0">
   <transformers>
     <transformer
       name="Download"
       isPrimary="True"
-      displayName="Download BC CDC Data"
+      displayName="BC COVID-19 Data: Download Cases from BC CDC"
       programName="Rscript"
       programArguments="data-bc-cdc.R"
       isRunnable ="True">

@@ -10,7 +10,7 @@ library(data.table)
 jurisdictionBC <- "Canada - British Columbia"
 casesDailyVar <- "Cases - Daily"
 casesCumVar <- "Cases - Cumulative"
-transformerName <- "Download BC CDC Data"
+transformerName <- "BC COVID-19 Data: Download Cases from BC CDC"
 
 # Get the environment 
 env <- ssimEnvironment()
