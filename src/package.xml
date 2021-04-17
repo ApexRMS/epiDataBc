@@ -15,10 +15,10 @@
               <columns>
                 <column name="InputID" dataType="Integer" isPrimary="True"/>
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
-                <column name="RegionalSummaryDataURL" displayName="Regional summary data URL" dataType="String"/>
+                <column name="Regions" dataType="Boolean" displayName="Disaggregate by health region:"/>
               </columns>
               <defaultRecords>
-                <record columns="RegionalSummaryDataURL" values="http://www.bccdc.ca/Health-Info-Site/Documents/BCCDC_COVID19_Regional_Summary_Data.csv"/>
+                <record columns="Regions" values="0"/>
               </defaultRecords>
             </datasheet>
           </datasheets>
@@ -31,7 +31,7 @@
                 <column name="ScenarioID" displayName="Scenario" dataType="Integer"/>
                 <column name="MinimumTimestep" displayName="Start date" dataType="String"/>
                 <column name="MaximumTimestep" displayName="End date" dataType="String"/>
-                <column name="RegionalSummaryDataFile" displayName="Regional summary data file" dataType="String" isExternalFile="True"/>
+                <column name="DataFile" displayName="Data file" dataType="String" isExternalFile="True"/>
                 <column name="DownloadDateTime" displayName="Download date/time" dataType="Date"/>
               </columns>
             </datasheet>
